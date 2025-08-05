@@ -1,10 +1,10 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core"; // Removed varchar, using text
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const events = pgTable("events", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const events = sqliteTable("events", {
+  id: text("id").primaryKey(), // Removed default UUID generation from schema
   name: text("name").notNull(),
   description: text("description"),
   organizerId: text("organizer_id").notNull(),
@@ -14,24 +14,24 @@ export const events = pgTable("events", {
   budget: text("budget"),
   exchangeDate: text("exchange_date"),
   anonymousMode: integer("anonymous_mode").notNull().default(1),
-  createdAt: timestamp("created_at").notNull().default(sql`now()`),
+  createdAt: real("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const participants = pgTable("participants", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const participants = sqliteTable("participants", {
+  id: text("id").primaryKey(), // Removed default UUID generation from schema
   eventId: text("event_id").notNull(),
   name: text("name").notNull(),
-  wishlist: jsonb("wishlist").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+  wishlist: text("wishlist").notNull().default("[]"), // jsonb changed to text
   assignedTo: text("assigned_to"),
-  joinedAt: timestamp("joined_at").notNull().default(sql`now()`),
+  joinedAt: real("joined_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const assignments = pgTable("assignments", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const assignments = sqliteTable("assignments", {
+  id: text("id").primaryKey(), // Removed default UUID generation from schema
   eventId: text("event_id").notNull(),
   giverId: text("giver_id").notNull(),
   receiverId: text("receiver_id").notNull(),
-  createdAt: timestamp("created_at").notNull().default(sql`now()`),
+  createdAt: real("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const insertEventSchema = createInsertSchema(events).omit({

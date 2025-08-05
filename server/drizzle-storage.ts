@@ -1,6 +1,7 @@
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
-import { eq, and } from "drizzle-orm"; // Import 'and' for multiple conditions
+import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import { eq, and } from "drizzle-orm";
+import { randomUUID } from "crypto"; // Import randomUUID
 import {
   events,
   participants,
@@ -14,12 +15,8 @@ import {
 } from "@shared/schema";
 import { IStorage } from "./storage";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is not set");
-}
-
-const sql = neon(process.env.DATABASE_URL);
-const db = drizzle(sql);
+const sqlite = new Database("./sqlite.db");
+const db = drizzle(sqlite);
 
 export class DrizzleStorage implements IStorage {
   async createEvent(insertEvent: InsertEvent & { anonymousMode?: number }): Promise<Event> {
@@ -27,6 +24,7 @@ export class DrizzleStorage implements IStorage {
       .insert(events)
       .values({
         ...insertEvent,
+        id: randomUUID(), // Generate UUID in application
         anonymousMode: insertEvent.anonymousMode === 0 ? 0 : 1,
       })
       .returning();
@@ -48,7 +46,11 @@ export class DrizzleStorage implements IStorage {
   async createParticipant(insertParticipant: InsertParticipant): Promise<Participant> {
     const [newParticipant] = await db
       .insert(participants)
-      .values(insertParticipant)
+      .values({
+        ...insertParticipant,
+        id: randomUUID(), // Generate UUID in application
+        wishlist: JSON.stringify(insertParticipant.wishlist), // Stringify wishlist for text column
+      })
       .returning();
     if (!newParticipant) {
       throw new Error("Failed to create participant");
@@ -57,27 +59,47 @@ export class DrizzleStorage implements IStorage {
   }
 
   async getParticipantsByEvent(eventId: string): Promise<Participant[]> {
-    return db.select().from(participants).where(eq(participants.eventId, eventId));
+    const result = await db.select().from(participants).where(eq(participants.eventId, eventId));
+    return result.map(p => ({
+      ...p,
+      wishlist: JSON.parse(p.wishlist as string) // Parse wishlist back to array
+    }));
   }
 
   async getParticipant(id: string): Promise<Participant | undefined> {
     const participant = await db.select().from(participants).where(eq(participants.id, id)).limit(1);
-    return participant[0];
+    if (participant[0]) {
+      return {
+        ...participant[0],
+        wishlist: JSON.parse(participant[0].wishlist as string)
+      };
+    }
+    return undefined;
   }
 
   async getParticipantByEventAndName(eventId: string, name: string): Promise<Participant | undefined> {
     const participant = await db
       .select()
       .from(participants)
-      .where(and(eq(participants.eventId, eventId), eq(participants.name, name))) // Use 'and' for multiple conditions
+      .where(and(eq(participants.eventId, eventId), eq(participants.name, name)))
       .limit(1);
-    return participant[0];
+    if (participant[0]) {
+      return {
+        ...participant[0],
+        wishlist: JSON.parse(participant[0].wishlist as string)
+      };
+    }
+    return undefined;
   }
 
   async createAssignments(insertAssignments: InsertAssignment[]): Promise<Assignment[]> {
+    const assignmentsToInsert = insertAssignments.map(a => ({
+      ...a,
+      id: randomUUID(), // Generate UUID in application
+    }));
     const newAssignments = await db
       .insert(assignments)
-      .values(insertAssignments)
+      .values(assignmentsToInsert)
       .returning();
     return newAssignments;
   }
@@ -90,7 +112,7 @@ export class DrizzleStorage implements IStorage {
     const assignment = await db
       .select()
       .from(assignments)
-      .where(and(eq(assignments.eventId, eventId), eq(assignments.giverId, giverId))) // Use 'and' for multiple conditions
+      .where(and(eq(assignments.eventId, eventId), eq(assignments.giverId, giverId)))
       .limit(1);
     return assignment[0];
   }
