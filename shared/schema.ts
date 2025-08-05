@@ -37,6 +37,8 @@ export const assignments = pgTable("assignments", {
 export const insertEventSchema = createInsertSchema(events).omit({
   id: true,
   createdAt: true,
+  status: true,
+  anonymousMode: true,
 }).extend({
   organizerId: z.string().min(1),
   organizerName: z.string().min(1),

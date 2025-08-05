@@ -30,7 +30,7 @@ export class MemStorage implements IStorage {
     this.assignments = new Map();
   }
 
-  async createEvent(insertEvent: InsertEvent): Promise<Event> {
+  async createEvent(insertEvent: InsertEvent & { anonymousMode?: number }): Promise<Event> {
     const id = randomUUID();
     const event: Event = {
       ...insertEvent,
@@ -39,7 +39,7 @@ export class MemStorage implements IStorage {
       description: insertEvent.description || null,
       budget: insertEvent.budget || null,
       exchangeDate: insertEvent.exchangeDate || null,
-      anonymousMode: 1,
+      anonymousMode: insertEvent.anonymousMode || 1,
       createdAt: new Date(),
     };
     this.events.set(id, event);
