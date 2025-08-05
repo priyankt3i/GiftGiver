@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { getEvent, runDraw } from '@/lib/api';
+import { getEvent, runDraw, type EventResponse } from '@/lib/api';
 import { EventHeader } from '@/components/event-header';
 import { ParticipantList } from '@/components/participant-list';
 import { QRCodeGenerator } from '@/components/qr-code-generator';
@@ -15,7 +15,7 @@ export default function OrganizerDashboard() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: event, isLoading, error } = useQuery({
+  const { data: event, isLoading, error } = useQuery<EventResponse>({
     queryKey: ['/api/events', eventId],
     enabled: !!eventId,
     refetchInterval: 5000, // Refresh every 5 seconds for real-time updates
@@ -131,7 +131,7 @@ export default function OrganizerDashboard() {
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-green-500 rounded-full flex items-center justify-center">
                   <span className="text-white text-sm font-medium">
-                    {event.organizerName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
+                    {event.organizerName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
                   </span>
                 </div>
                 <span className="text-sm font-medium text-gray-700">{event.organizerName}</span>
@@ -170,9 +170,9 @@ export default function OrganizerDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {event.participants
-                    .sort((a, b) => new Date(b.joinedAt).getTime() - new Date(a.joinedAt).getTime())
+                    .sort((a: any, b: any) => new Date(b.joinedAt).getTime() - new Date(a.joinedAt).getTime())
                     .slice(0, 5)
-                    .map((participant, index) => (
+                    .map((participant: any, index: number) => (
                       <div key={participant.id} className="flex items-start space-x-3">
                         <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                           <Gift className="w-4 h-4 text-green-600" />

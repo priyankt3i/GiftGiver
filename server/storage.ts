@@ -35,6 +35,11 @@ export class MemStorage implements IStorage {
     const event: Event = {
       ...insertEvent,
       id,
+      status: "waiting",
+      description: insertEvent.description || null,
+      budget: insertEvent.budget || null,
+      exchangeDate: insertEvent.exchangeDate || null,
+      anonymousMode: 1,
       createdAt: new Date(),
     };
     this.events.set(id, event);

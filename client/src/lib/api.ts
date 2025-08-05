@@ -19,13 +19,13 @@ export interface JoinEventRequest {
 export interface EventResponse {
   id: string;
   name: string;
-  description?: string;
+  description?: string | null;
   organizerId: string;
   organizerName: string;
   maxParticipants: number;
   status: "waiting" | "drawn" | "completed";
-  budget?: string;
-  exchangeDate?: string;
+  budget?: string | null;
+  exchangeDate?: string | null;
   anonymousMode: boolean;
   createdAt: string;
   participantCount: number;

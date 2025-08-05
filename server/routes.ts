@@ -51,7 +51,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const event = await storage.createEvent(eventData);
       res.json(event);
     } catch (error) {
-      res.status(400).json({ message: "Invalid event data", error: error.message });
+      res.status(400).json({ message: "Invalid event data", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -75,7 +75,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }))
       });
     } catch (error) {
-      res.status(500).json({ message: "Failed to get event", error: error.message });
+      res.status(500).json({ message: "Failed to get event", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -123,7 +123,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       });
     } catch (error) {
-      res.status(400).json({ message: "Failed to join event", error: error.message });
+      res.status(400).json({ message: "Failed to join event", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -142,7 +142,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         joinedAt: p.joinedAt
       })));
     } catch (error) {
-      res.status(500).json({ message: "Failed to get participants", error: error.message });
+      res.status(500).json({ message: "Failed to get participants", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -185,7 +185,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         assignmentCount: assignments.length
       });
     } catch (error) {
-      res.status(500).json({ message: "Failed to run draw", error: error.message });
+      res.status(500).json({ message: "Failed to run draw", error: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -229,7 +229,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       });
     } catch (error) {
-      res.status(500).json({ message: "Failed to get assignment", error: error.message });
+      res.status(500).json({ message: "Failed to get assignment", error: error instanceof Error ? error.message : String(error) });
     }
   });
 

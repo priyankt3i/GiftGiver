@@ -13,7 +13,7 @@ export const events = pgTable("events", {
   status: text("status", { enum: ["waiting", "drawn", "completed"] }).notNull().default("waiting"),
   budget: text("budget"),
   exchangeDate: text("exchange_date"),
-  anonymousMode: integer("anonymous_mode", { mode: "boolean" }).notNull().default(true),
+  anonymousMode: integer("anonymous_mode").notNull().default(1),
   createdAt: timestamp("created_at").notNull().default(sql`now()`),
 });
 
@@ -21,7 +21,7 @@ export const participants = pgTable("participants", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   eventId: text("event_id").notNull(),
   name: text("name").notNull(),
-  wishlist: jsonb("wishlist").$type<string[]>().notNull().default([]),
+  wishlist: jsonb("wishlist").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
   assignedTo: text("assigned_to"),
   joinedAt: timestamp("joined_at").notNull().default(sql`now()`),
 });

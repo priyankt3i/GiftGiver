@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { getEvent, joinEvent } from '@/lib/api';
+import { getEvent, joinEvent, type EventResponse } from '@/lib/api';
 import { saveParticipantSession } from '@/lib/session';
 import { Gift, UserPlus, Users, X } from 'lucide-react';
 import { useState } from 'react';
@@ -29,7 +29,7 @@ export default function JoinEvent() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
-  const { data: event, isLoading, error } = useQuery({
+  const { data: event, isLoading, error } = useQuery<EventResponse>({
     queryKey: ['/api/events', eventId],
     enabled: !!eventId,
   });

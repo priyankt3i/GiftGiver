@@ -1,14 +1,14 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Users, IdCard, Shuffle, Copy } from 'lucide-react';
+import { Calendar, Users, IdCard, Shuffle, Copy, Clock, CheckCircle, Gift } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface EventHeaderProps {
   event: {
     id: string;
     name: string;
-    description?: string;
+    description?: string | null;
     createdAt: string;
     participantCount: number;
     maxParticipants: number;

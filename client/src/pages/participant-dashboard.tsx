@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getEvent, getAssignment } from '@/lib/api';
+import { getEvent, getAssignment, type EventResponse, type AssignmentResponse } from '@/lib/api';
 import { getParticipantSession } from '@/lib/session';
 import { Gift, Clock, CheckCircle, Users, Calendar, DollarSign } from 'lucide-react';
 
@@ -11,13 +11,13 @@ export default function ParticipantDashboard() {
   const { eventId } = useParams();
   const participantSession = getParticipantSession();
 
-  const { data: event, isLoading: eventLoading } = useQuery({
+  const { data: event, isLoading: eventLoading } = useQuery<EventResponse>({
     queryKey: ['/api/events', eventId],
     enabled: !!eventId,
     refetchInterval: 5000, // Refresh every 5 seconds for real-time updates
   });
 
-  const { data: assignment, isLoading: assignmentLoading } = useQuery({
+  const { data: assignment, isLoading: assignmentLoading } = useQuery<AssignmentResponse>({
     queryKey: ['/api/events', eventId, 'participants', participantSession?.participantId, 'assignment'],
     enabled: !!eventId && !!participantSession?.participantId,
     refetchInterval: 5000,
@@ -240,7 +240,7 @@ export default function ParticipantDashboard() {
                   <div>
                     <h5 className="font-medium text-gray-900 mb-3">Their Wishlist:</h5>
                     <div className="space-y-2">
-                      {assignment.receiver.wishlist.map((item, index) => (
+                      {assignment.receiver.wishlist.map((item: string, index: number) => (
                         <div
                           key={index}
                           className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg"
