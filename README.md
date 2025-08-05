@@ -63,10 +63,26 @@ The application is configured to work out of the box with no additional environm
 
 ### 4. Start the Development Server
 
-Run the following command to start both the frontend and backend servers:
-
+#### For Mac/Linux:
 ```bash
 npm run dev
+```
+
+#### For Windows:
+If you get an error about `NODE_ENV` not being recognized, use one of these alternatives:
+
+**Option 1 - Install cross-env (Recommended):**
+```bash
+npm install cross-env
+```
+Then run:
+```bash
+npx cross-env NODE_ENV=development tsx server/index.ts
+```
+
+**Option 2 - Direct command:**
+```bash
+npx tsx server/index.ts
 ```
 
 This command will:
@@ -175,19 +191,25 @@ The application is built with customization in mind:
 
 ### Common Issues
 
-1. **Port Already in Use**
+1. **Windows: 'NODE_ENV' is not recognized error**
+   - This happens because Windows Command Prompt doesn't support the `NODE_ENV=development` syntax
+   - **Solution**: Use the Windows-specific commands provided in step 4 above
+   - Install `cross-env` with `npm install cross-env` then use `npx cross-env NODE_ENV=development tsx server/index.ts`
+   - Or use the direct command: `npx tsx server/index.ts`
+
+2. **Port Already in Use**
    - If port 5000 is already in use, stop other applications using that port
    - Or modify the port in `server/index.ts`
 
-2. **Dependencies Not Installing**
+3. **Dependencies Not Installing**
    - Try deleting `node_modules` and `package-lock.json`
    - Run `npm install` again
 
-3. **Server Not Starting**
+4. **Server Not Starting**
    - Check that Node.js version is 18 or higher
    - Ensure all dependencies are installed
 
-4. **Frontend Not Loading**
+5. **Frontend Not Loading**
    - Make sure the development server started successfully
    - Check browser console for any error messages
 
