@@ -47,21 +47,18 @@ export default function JoinEvent() {
   const joinEventMutation = useMutation({
     mutationFn: (data: { name: string; wishlist: string[] }) => joinEvent(eventId!, data),
     onSuccess: (response) => {
-      // Save participant session
       saveParticipantSession({
         participantId: response.participant.id,
         eventId: response.participant.eventId,
         name: response.participant.name,
       });
-
       toast({
         title: "Successfully joined!",
         description: `Welcome to ${response.event.name}`,
       });
-
       setLocation(`/my/${eventId}`);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toast({
         title: "Failed to join event",
         description: error.message || "Please try again",

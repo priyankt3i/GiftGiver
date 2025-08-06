@@ -18,19 +18,18 @@ export default function OrganizerDashboard() {
   const { data: event, isLoading, error } = useQuery<EventResponse>({
     queryKey: ['/api/events', eventId],
     enabled: !!eventId,
-    refetchInterval: 5000, // Refresh every 5 seconds for real-time updates
   });
 
   const runDrawMutation = useMutation({
     mutationFn: () => runDraw(eventId!),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/events', eventId] });
+    onSuccess: () => {
       toast({
-        title: "Draw completed successfully!",
-        description: `${data.assignmentCount} assignments created. Participants can now see their matches.`,
+        title: "Draw Completed",
+        description: "Secret Santa assignments have been generated.",
       });
+      queryClient.invalidateQueries({ queryKey: ['/api/events', eventId] });
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toast({
         title: "Failed to run draw",
         description: error.message || "Please try again",

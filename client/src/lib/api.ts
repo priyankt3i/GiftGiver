@@ -52,7 +52,14 @@ export interface AssignmentResponse {
 }
 
 export async function createEvent(data: CreateEventRequest): Promise<EventResponse> {
-  const response = await apiRequest("POST", "/api/events", data);
+  const response = await fetch('/api/events', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error(await response.text());
+  }
   return response.json();
 }
 

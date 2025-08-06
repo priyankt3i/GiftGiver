@@ -1,6 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { storage } from "../../server/storage";
-import { insertEventSchema, insertParticipantSchema } from "@shared/schema";
+// Update the import path to the correct relative location if needed
+import { insertEventSchema, insertParticipantSchema } from "../../shared/schema";
 import { randomUUID } from "crypto";
 
 function shuffle<T>(array: T[]): T[] {

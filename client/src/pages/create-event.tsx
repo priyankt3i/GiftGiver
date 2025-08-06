@@ -21,6 +21,7 @@ const createEventSchema = z.object({
   maxParticipants: z.number().min(2, 'At least 2 participants required').max(100, 'Maximum 100 participants'),
   budget: z.string().optional(),
   exchangeDate: z.string().optional(),
+  organizerId: z.string(), // Add organizerId to schema
 });
 
 type CreateEventForm = z.infer<typeof createEventSchema>;
@@ -30,7 +31,6 @@ export default function CreateEvent() {
   const { toast } = useToast();
 
   const form = useForm<CreateEventForm>({
-    resolver: zodResolver(createEventSchema),
     defaultValues: {
       name: '',
       description: '',
@@ -38,27 +38,20 @@ export default function CreateEvent() {
       maxParticipants: 10,
       budget: '',
       exchangeDate: '',
+      organizerId: '', // Add organizerId to default values
     },
   });
 
   const createEventMutation = useMutation({
-    mutationFn: createEvent,
-    onSuccess: (event) => {
-      // Save organizer session
-      const organizerId = generateUserId();
-      saveOrganizerSession({
-        organizerId,
-        name: form.getValues('organizerName'),
-      });
-
+    mutationFn: (data: CreateEventForm) => createEvent(data),
+    onSuccess: (response) => {
       toast({
-        title: "Event created successfully!",
-        description: `${event.name} is ready for participants`,
+        title: "Event Created",
+        description: `Your event "${response.name}" has been created.`,
       });
-
-      setLocation(`/dashboard/${event.id}`);
+      setLocation(`/organizer/${response.id}`);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toast({
         title: "Failed to create event",
         description: error.message || "Please try again",
