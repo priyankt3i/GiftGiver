@@ -4,14 +4,14 @@
   "outputDirectory": "client/dist",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/[...path].ts"
+      "source": "/api/(.*)",
+      "destination": "/api/[...path].ts"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/client/dist/$1"
     }
   ]
 }
