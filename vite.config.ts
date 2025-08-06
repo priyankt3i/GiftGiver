@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename)
 
 export default defineConfig({
   root: 'client',
+  base: './', // Add this line to set the base path for assets
   plugins: [react()],
   resolve: {
     alias: {
