@@ -44,6 +44,10 @@ function generateSecretSantaAssignments(participantIds: string[]) {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('Request Method:', req.method);
+  console.log('Request Body:', req.body);
+  console.log('Request Headers:', req.headers);
+
   const { query, method, body } = req;
   const pathSegments = query.path as string[];
 

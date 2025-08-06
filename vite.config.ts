@@ -7,6 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://your-vercel-app.vercel.app"
+    : "http://localhost:3000";
+
 export default defineConfig({
   plugins: [
     react(),
@@ -36,7 +41,7 @@ export default defineConfig({
       deny: ["**/.*"],
     },
     proxy: {
-      '/api': 'http://localhost:3000', // Proxy API requests to the backend
+      "/api": "http://localhost:3000", // Proxy API requests to the backend
     },
   },
 });
