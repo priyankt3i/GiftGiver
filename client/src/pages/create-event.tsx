@@ -22,6 +22,7 @@ const createEventSchema = z.object({
   budget: z.string().optional(),
   exchangeDate: z.string().optional(),
   organizerId: z.string(), // Add organizerId to schema
+  anonymousMode: z.boolean().optional(),
 });
 
 type CreateEventForm = z.infer<typeof createEventSchema>;
@@ -39,6 +40,7 @@ export default function CreateEvent() {
       budget: '',
       exchangeDate: '',
       organizerId: '', // Add organizerId to default values
+      anonymousMode: false,
     },
   });
 
