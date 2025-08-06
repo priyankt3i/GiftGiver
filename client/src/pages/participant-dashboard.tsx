@@ -1,10 +1,10 @@
 import { useParams } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { getEvent, getAssignment, type EventResponse, type AssignmentResponse } from '@/lib/api';
-import { getParticipantSession } from '@/lib/session';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Skeleton } from '../components/ui/skeleton';
+import { getEvent, getAssignment, type EventResponse, type AssignmentResponse } from '../lib/api';
+import { getParticipantSession } from '../lib/session';
 import { Gift, Clock, CheckCircle, Users, Calendar, DollarSign } from 'lucide-react';
 
 export default function ParticipantDashboard() {

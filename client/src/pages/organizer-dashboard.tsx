@@ -1,13 +1,13 @@
 import { useParams } from 'wouter';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useToast } from '@/hooks/use-toast';
-import { getEvent, runDraw, type EventResponse } from '@/lib/api';
-import { EventHeader } from '@/components/event-header';
-import { ParticipantList } from '@/components/participant-list';
-import { QRCodeGenerator } from '@/components/qr-code-generator';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Skeleton } from '../components/ui/skeleton';
+import { useToast } from '../hooks/use-toast';
+import { getEvent, runDraw, type EventResponse } from '../lib/api';
+import { EventHeader } from '../components/event-header';
+import { ParticipantList } from '../components/participant-list';
+import { QRCodeGenerator } from '../components/qr-code-generator';
 import { Gift, Settings, Mail, Download, BarChart3, Trash2 } from 'lucide-react';
 
 export default function OrganizerDashboard() {

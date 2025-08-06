@@ -1,13 +1,13 @@
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import CreateEvent from "@/pages/create-event";
-import JoinEvent from "@/pages/join-event";
-import OrganizerDashboard from "@/pages/organizer-dashboard";
-import ParticipantDashboard from "@/pages/participant-dashboard";
+import { Toaster } from "./components/ui/toaster";
+import { TooltipProvider } from "./components/ui/tooltip";
+import NotFound from "./pages/not-found";
+import CreateEvent from "./pages/create-event";
+import JoinEvent from "./pages/join-event";
+import OrganizerDashboard from "./pages/organizer-dashboard";
+import ParticipantDashboard from "./pages/participant-dashboard";
 
 function Router() {
   return (
