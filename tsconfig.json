@@ -24,6 +24,6 @@
     "shared/**/*.ts",
     "server/**/*.ts",
     "api/**/*.ts"
-  ],
+, "api/[...path].ts.backup"  ],
   "exclude": ["node_modules", "build", "dist", "**/*.test.ts"]
 }
